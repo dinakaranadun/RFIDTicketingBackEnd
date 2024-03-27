@@ -2,18 +2,21 @@
 
 namespace Database\Seeders;
 
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
-class DatabaseSeeder extends Seeder
+class UsersTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
+     *
+     * @return void
      */
-    public function run(): void
+    public function run()
     {
-        \App\Models\User::factory(2)->create();
-
+        // Dummy data for users table
         $users = [
             [
                 'fName' => 'John',
@@ -26,7 +29,7 @@ class DatabaseSeeder extends Seeder
                 'account_credits' => 0.00,
                 'status' => 'active',
                 'contactnumber_verified_at' => Carbon::now(),
-                'password' => Hash::make('password'),
+                'password' => Hash::make('dinakara'),
                 'remember_token' => null,
                 'created_at' => Carbon::now(),
                 'updated_at' => Carbon::now(),
@@ -34,6 +37,7 @@ class DatabaseSeeder extends Seeder
             // Add more users as needed
         ];
 
+        // Insert data into users table
         DB::table('users')->insert($users);
     }
 }
