@@ -33,7 +33,7 @@ class Train extends Model
 
     public function schedule()
     {
-        return $this->hasMany(Schedule::class, 'train_id', 'id');
+        return $this->hasMany(Schedule::class);
     }
 
 

@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Train;
+use App\Models\Station;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Scheduale extends Model
 {
@@ -21,12 +23,12 @@ class Scheduale extends Model
 
     public function train()
     {
-        return $this->belongsTo(Train::class);
+        return $this->belongsTo(Train::class, 'train_id', 'id');
     }
 
     public function station()
     {
-        return $this->belongsTo(Station::class);
+        return $this->belongsTo(Station::class, 'station_id', 'id');
     }
 
 }

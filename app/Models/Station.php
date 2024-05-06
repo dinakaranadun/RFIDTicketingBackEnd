@@ -23,6 +23,6 @@ class Station extends Model
 
     public function schedule()
     {
-        return $this->hasMany(Schedule::class, 'station_id', 'id');
+        return $this->hasMany(Schedule::class);
     }
 }

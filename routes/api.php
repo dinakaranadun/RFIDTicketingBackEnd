@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\TrainController;
+use App\Http\Controllers\TicketController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\PassengerController;
 
@@ -30,6 +31,12 @@ Route::prefix('v1')->group(function () {
         Route::post('searchtrains', [TrainController::class, 'show']);
         //station
         Route::get('stationdetails', [StationController::class, 'index']);
+        //ticket
+        Route::post('calculate-ticket-cost',[TicketController::class,'index']);
+        Route::post('bookTicket',[TicketController::class,'store']);
+        Route::post('upcomingTrips',[TicketController::class,'show']);
+        Route::delete('deleteBooking/{bookingId}', [TicketController::class, 'destroy']);
+
     });
     Route::prefix('auth')->group(function () {
         Route::post('login', [AuthController::class, 'login']);
