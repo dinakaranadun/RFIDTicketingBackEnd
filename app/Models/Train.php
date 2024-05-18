@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Train;
+use App\Models\Station;
 use App\Models\TrainClass;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Console\Scheduling\Schedule;
@@ -35,6 +36,22 @@ class Train extends Model
     {
         return $this->hasMany(Schedule::class);
     }
+
+    public function startStation()
+    {
+        return $this->belongsTo(Station::class, 'start_station', 'id');
+    }
+
+    public function endStation()
+    {
+        return $this->belongsTo(Station::class, 'end_station', 'id');
+    }
+
+    // public function trainClassess()
+    // {
+    //     return $this->hasMany(TrainClass::class, 'train_id', 'id');
+    // }
+
 
 
 }

@@ -1,5 +1,12 @@
 <?php
 
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\RouteController;
+use App\Http\Controllers\Admin\StationController;
+use App\Http\Controllers\Admin\TrainClassController;
+use App\Http\Controllers\Admin\TrainController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +20,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/login', [AuthController::class, 'login'])->name('login');
+Route::post('/login', [AuthController::class, 'authenticate'])->name('authenticate');
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+Route::group(['middleware' => 'auth:web'], function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::resource('employee', EmployeeController::class);
+    Route::resource('station', StationController::class);
+    Route::resource('train', TrainController::class);
+    Route::resource('route', RouteController::class);
 });

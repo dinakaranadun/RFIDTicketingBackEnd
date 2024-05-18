@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,5 +25,10 @@ class Station extends Model
     public function schedule()
     {
         return $this->hasMany(Schedule::class);
+    }
+
+    public function ticket()
+    {
+        return $this->hasMany(Ticket::class);
     }
 }

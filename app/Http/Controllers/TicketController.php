@@ -105,8 +105,6 @@ class TicketController extends Controller
 
         
         $ticket = new Ticket();    
-        $ticket->start_station = $data['departure'];
-        $ticket->destination = $data['destination'];
         $ticket->class = $data['class'];
         $ticket->date = $data['date'];
         $ticket->time = $data['time'];
@@ -114,6 +112,8 @@ class TicketController extends Controller
         $ticket->passenger_id = $data['passenger_id'];
         $ticket->train_id = $data['trainId'];
         $ticket->status = 'pending';
+        $ticket->start_station_id = $data['departure_id'];
+        $ticket->end_station_id = $data['destination_id'];
         $ticket->save();
         return response()->json(['message' => 'Booking successful', 'ticket' => $ticket], 201);
 
@@ -136,9 +136,17 @@ class TicketController extends Controller
     
         $pendingTicketsByPassenger = Ticket::where('passenger_id', $passengerId)
             ->where('status', 'pending')
-            ->with(['train' => function ($query) {
-                $query->select('id', 'name');
-            }])
+            ->with([
+                'train' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'startStation' => function ($query) {
+                    $query->select('id', 'station_name');
+                },
+                'endStation' => function ($query) {
+                    $query->select('id', 'station_name');
+                }
+            ])
             ->get();
     
         return response()->json($pendingTicketsByPassenger);

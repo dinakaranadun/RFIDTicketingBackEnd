@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\RFIDController;
+use App\Http\Controllers\ForumController;
 use App\Http\Controllers\TrainController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\StationController;
@@ -36,6 +38,15 @@ Route::prefix('v1')->group(function () {
         Route::post('bookTicket',[TicketController::class,'store']);
         Route::post('upcomingTrips',[TicketController::class,'show']);
         Route::delete('deleteBooking/{bookingId}', [TicketController::class, 'destroy']);
+
+        //rfid
+        Route::post('handleRFID', [RFIDController::class, 'handleRFID']);
+
+        //forum
+        Route::post('createForum', [ForumController::class, 'store']);
+        Route::get('getForum', [ForumController::class, 'index']);
+        Route::put('updateForum/{id}', [ForumController::class, 'edit']);
+        Route::delete('deleteForum/{id}', [ForumController::class, 'destroy']);
 
     });
     Route::prefix('auth')->group(function () {

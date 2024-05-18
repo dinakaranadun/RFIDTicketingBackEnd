@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\User;
+use App\Models\Train;
+use App\Models\Station;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Ticket extends Model
 {
@@ -13,8 +16,6 @@ class Ticket extends Model
     protected $primaryKey = 'id';
 
     protected $fillable = [
-        'start_station',
-        'destination',
         'class',
         'date',
         'time',
@@ -22,6 +23,8 @@ class Ticket extends Model
         'passenger_id',
         'train_id',
         'status',
+        'start_station_id',
+        'end_station_id',
 
     ];
     
@@ -30,10 +33,22 @@ class Ticket extends Model
 
     public function passenger()
     {
-        return $this->belongsTo(Passenger::class, 'passenger_id', 'id');
+        return $this->belongsTo(User::class, 'passenger_id', 'id');
     }
     public function train()
     {
         return $this->belongsTo(Train::class);
+    }
+    public function station(){
+        return $this->belongsTo(Station::class);
+    }
+    public function startStation()
+    {
+        return $this->belongsTo(Station::class, 'start_station_id');
+    }
+
+    public function endStation()
+    {
+        return $this->belongsTo(Station::class, 'end_station_id');
     }
 }

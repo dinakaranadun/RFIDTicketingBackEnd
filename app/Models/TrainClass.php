@@ -12,11 +12,15 @@ class TrainClass extends Model
     protected $table = 'train_class';
 
     protected $fillable = ['train_id', 'class'];
+    public $timestamps = false;
+
 
 
     public function train()
     {
         return $this->belongsTo(Train::class, 'train_id', 'id');
     }
+    
+    
 }
 
