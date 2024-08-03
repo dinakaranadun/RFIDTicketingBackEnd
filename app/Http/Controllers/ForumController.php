@@ -40,7 +40,6 @@ class ForumController extends Controller
             'passenger_id' => 'required|integer',
         ]);
 
-        // Create a new forum post
         $forum = new Forum();
         $forum->title = $request->input('title');
         $forum->category = $request->input('category');

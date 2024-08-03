@@ -14,7 +14,6 @@ class PassengerController extends Controller
         $prefix = 'RFID';
         $length = 10; 
 
-        // Get the last user 
         $lastUser = User::orderBy('id', 'desc')->first();
         $lastRFID = ($lastUser) ? $lastUser->rfid : null;
 
@@ -23,7 +22,6 @@ class PassengerController extends Controller
 
         $nextNumber = $lastNumber + 1;
 
-        // adding 0
         $paddedNumber = str_pad($nextNumber, $length, '0', STR_PAD_LEFT);
 
     
@@ -61,7 +59,6 @@ class PassengerController extends Controller
             'contact_number' => 'required|string|max:10',
         ]);
 
-        // Create the user
         $user = new User();
         $user->fName = $request->input('first_name');
         $user->lName = $request->input('last_name');

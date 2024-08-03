@@ -9,6 +9,7 @@ use App\Http\Controllers\TrainController;
 use App\Http\Controllers\TicketController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\PassengerController;
+use App\Http\Controllers\SchedualeController;
 
 
 /*
@@ -38,6 +39,8 @@ Route::prefix('v1')->group(function () {
         Route::post('bookTicket',[TicketController::class,'store']);
         Route::post('upcomingTrips',[TicketController::class,'show']);
         Route::delete('deleteBooking/{bookingId}', [TicketController::class, 'destroy']);
+        //scheduale
+        Route::post('searchscheduale', [SchedualeController::class, 'search']);
 
         //rfid
         Route::post('handleRFID', [RFIDController::class, 'handleRFID']);

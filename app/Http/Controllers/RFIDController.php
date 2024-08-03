@@ -35,7 +35,7 @@ class RFIDController extends Controller
             ], 404);
         }
 
-        $now = Carbon::now();
+        $now = Carbon::now('Asia/Colombo');
         // $twoHoursBefore = $now->copy()->subHours(2);
 
         $bookings = Ticket::where('passenger_id', $user->id)
@@ -79,7 +79,7 @@ class RFIDController extends Controller
             
             $cost = $relevantBooking->cost;
 
-            if ($relevantBooking->end_station_id  == $scannerId) {
+            // if ($relevantBooking->end_station_id  == $scannerId) {
                 $user->account_credits -= $cost;
                 $user->save();
         
@@ -96,12 +96,12 @@ class RFIDController extends Controller
                 ]);
 
                 $this->createScannerTicket($scannerId, $relevantBooking->id, $now);
-            }else{
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Invalid exit station. Please exit at the correct station.',
-                ]);
-            }
+            // // }else{
+            // //     return response()->json([
+            // //         'success' => false,
+            // //         'message' => 'Invalid exit station. Please exit at the correct station.',
+            // //     ]);
+            // }
     
             
         }
