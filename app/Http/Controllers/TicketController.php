@@ -3,19 +3,20 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Train;
 use App\Models\Ticket;
 use App\Models\Station;
 use App\Models\Scheduale;
-use App\Models\Train;
 use Illuminate\Http\Request;
+use App\Services\D7SMSService;
+use App\Http\Controllers\SMSController;
+
 
 class TicketController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+   
     public function index(Request $request)
-{
+   {
     $cost_for_1km = 2;
     $minimum_distance_cost = 20;
 
@@ -67,8 +68,8 @@ class TicketController extends Controller
         'cost' => $cost
     ];
 
-    return response()->json($response);
-}
+    return response()->json($response); 
+   }
 
     /**
      * Show the form for creating a new resource.
@@ -92,7 +93,8 @@ class TicketController extends Controller
             'class'=>'required|string',
             'date'=>'required|date',
             'cost'=>'required|numeric',
-            'passenger_id'=>'required|integer'
+            'passenger_id'=>'required|integer',
+            'contact_number'=>'required|string'
         ]);
 
         $data['time'] = Scheduale::select('arrival_time')
@@ -100,7 +102,12 @@ class TicketController extends Controller
                         ->where('station_id', $data['departure_id'])
                         ->value('arrival_time');
 
+        $data["train_name"] = Train::select('name')
+                        ->where('id', $data['trainId'])
+                        ->value('name');
+
         $data['date'] = Carbon::parse($data['date'])->format('Y-m-d');
+
 
 
         
@@ -115,7 +122,33 @@ class TicketController extends Controller
         $ticket->start_station_id = $data['departure_id'];
         $ticket->end_station_id = $data['destination_id'];
         $ticket->save();
-        return response()->json(['message' => 'Booking successful', 'ticket' => $ticket], 201);
+
+        $contactNumber = (string)$data['contact_number'];
+        if (strpos($contactNumber, '0') === 0) {
+            $contactNumber = '94' . substr($contactNumber, 1);
+        } else {
+            $contactNumber = '94' . $contactNumber;
+        }
+
+        //sms message body
+        $message = "Your Booking Successful!\n"
+        . "Train Name : ".$data["train_name"]."\n"
+        . "Departure: " . $data['departure'] . "\n"
+        . "Destination: " . $data['destination'] . "\n"
+        . "Date: " . $data['date'] . "\n"
+        . "Time: " . $data['time'] . "\n"
+        . "Class: " . $data['class'] . "\n"
+        . "Cost: Rs." . $data['cost']."\n"
+        ."Thank You For Using Sri Lankan Railway";
+
+
+        $smsController = new SMSController();
+        $smsController->sendSms( $contactNumber,$message);
+
+        return response()->json(['message' => 'Booking successfull', 'ticket' => $ticket], 201);
+
+
+
 
     }
 
@@ -181,5 +214,31 @@ class TicketController extends Controller
         $ticket->delete();
     
         return response()->json(['message' => 'Ticket deleted successfully'], 200);
+    }
+
+    public function recentTicket(Request $request){
+        $data = $request->validate([
+            'passenger_id' => 'required|integer'
+        ]);
+
+        $passengerId = $data['passenger_id'];
+
+        $recentTickets = Ticket::where('passenger_id', $passengerId)
+            ->where('status', 'out')
+            ->orderBy('created_at', 'desc')
+            ->with([
+                'train' => function ($query) {
+                    $query->select('id', 'name');
+                },
+                'startStation' => function ($query) {
+                    $query->select('id', 'station_name');
+                },
+                'endStation' => function ($query) {
+                    $query->select('id', 'station_name');
+                }
+            ])
+            ->get();
+
+        return response()->json($recentTickets);
     }
 }

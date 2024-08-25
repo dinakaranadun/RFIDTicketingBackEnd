@@ -7,9 +7,11 @@ use App\Http\Controllers\RFIDController;
 use App\Http\Controllers\ForumController;
 use App\Http\Controllers\TrainController;
 use App\Http\Controllers\TicketController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\StationController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\SchedualeController;
+use App\Http\Controllers\TransactionController;
 
 
 /*
@@ -38,6 +40,7 @@ Route::prefix('v1')->group(function () {
         Route::post('calculate-ticket-cost',[TicketController::class,'index']);
         Route::post('bookTicket',[TicketController::class,'store']);
         Route::post('upcomingTrips',[TicketController::class,'show']);
+        Route::post('getRecentTrips',[TicketController::class,'recentTicket']);
         Route::delete('deleteBooking/{bookingId}', [TicketController::class, 'destroy']);
         //scheduale
         Route::post('searchscheduale', [SchedualeController::class, 'search']);
@@ -50,6 +53,15 @@ Route::prefix('v1')->group(function () {
         Route::get('getForum', [ForumController::class, 'index']);
         Route::put('updateForum/{id}', [ForumController::class, 'edit']);
         Route::delete('deleteForum/{id}', [ForumController::class, 'destroy']);
+
+        //payment
+        Route::post('createPaymentIntent', [PaymentController::class, 'createPaymentIntent']);
+        Route::post('paymentSuccess', [PaymentController::class, 'paymentSuccess']);
+
+        //transaction
+        Route::post('getTransactionData', [TransactionController::class, 'getTransactionData']);
+
+        
 
     });
     Route::prefix('auth')->group(function () {

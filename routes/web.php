@@ -1,13 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\AuthController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\RouteController;
-use App\Http\Controllers\Admin\StationController;
-use App\Http\Controllers\Admin\TrainClassController;
-use App\Http\Controllers\Admin\TrainController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\SMSController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\RouteController;
+use App\Http\Controllers\Admin\TrainController;
+use App\Http\Controllers\Admin\StationController;
+use App\Http\Controllers\Admin\EmployeeController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\TrainClassController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,4 +31,5 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('station', StationController::class);
     Route::resource('train', TrainController::class);
     Route::resource('route', RouteController::class);
+    Route::post('send-sms', [SMSController::class, 'sendSms']);
 });
