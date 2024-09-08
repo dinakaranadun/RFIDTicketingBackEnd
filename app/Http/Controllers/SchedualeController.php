@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Train;
 use App\Models\Station;
 use App\Models\Scheduale;
@@ -18,7 +19,9 @@ class SchedualeController extends Controller
         ]);
         $departure = $validatedData['departure'];
         $destination = $validatedData['destination'];
-        $date = $validatedData['date'];
+        $searchDate = $validatedData['date'];
+
+        $date = Carbon::parse($searchDate);
 
         $departureStationId = Station::where('station_name', $departure)->value('id');
         $destinationStationId = Station::where('station_name', $destination)->value('id');
@@ -28,6 +31,12 @@ class SchedualeController extends Controller
                 $query->select('train_id')
                     ->from('schedule')
                     ->where('station_id', $destinationStationId);
+            })
+            ->where(function ($query) use ($date) {
+                if ($date->isToday()) {
+                    $currentTime = now()->format('H:i:s');
+                    $query->where('departure_time', '>', $currentTime);
+                }
             })
             ->pluck('train_id');
 

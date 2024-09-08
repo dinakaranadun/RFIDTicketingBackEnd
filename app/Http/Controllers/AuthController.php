@@ -26,7 +26,7 @@ class AuthController extends Controller
      */
     public function login(Request $request)
     {
-        $credentials = $request->only('email', 'password');
+        $credentials = $request->only('NIC', 'password');
 
         if (!Auth::attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -86,4 +86,6 @@ class AuthController extends Controller
             'user' => auth()->user()
         ]);
     }
+
+    
 }

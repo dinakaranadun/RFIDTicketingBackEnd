@@ -78,11 +78,11 @@
                             </div>
                         </div>
                         <div class="card-footer ">
-                             <hr>
-                             <div class="stats">
-                                 <i class="fa fa-clock-o"></i> Manage Stations
-                             </div>
-                         </div>
+                            <hr>
+                            <div class="stats">
+                                <i class="fa fa-clock-o"></i> Manage Stations
+                            </div>
+                        </div>
                     </div>
                 </a>
             </div>
@@ -93,14 +93,13 @@
                             <div class="row">
                                 <div class="col-5 col-md-4">
                                     <div class="icon-big text-center icon-warning">
-                                        <i class="nc-icon nc-vector text-primary"></i>
+                                        <i class="nc-icon nc-chat-33 text-primary"></i>
                                     </div>
                                 </div>
                                 <div class="col-7 col-md-8">
                                     <div class="numbers">
-                                        <p class="card-category">Total Routes</p>
-                                        <p class="card-title">{{ $total_routes }}
-                                        <p>
+                                        <p class="card-category">Total Forum Threads</p>
+                                        <p class="card-title">{{ $total_forums }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -115,5 +114,40 @@
                 </a>
             </div>
         </div>
+        <div class="row">
+            <div class="col">
+                <div class="card card-stats p-3">
+                    <div class="numbers">
+                        <p class="card-category">Earnings per Day</p>
+                    </div>
+                    <canvas id="earnPerDay"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
+@push('scripts')
+    <script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
+    <script>
+        new Chart(document.getElementById('earnPerDay').getContext("2d"), {
+            type: 'line',
+            data: {
+                labels: @json(array_keys($earn_per_day)),
+                datasets: [{
+                    label: 'Earning',
+                    data: @json(array_values($earn_per_day)),
+                    // borderWidth: 1
+                    borderColor: "#f17e5d",
+                    backgroundColor: "#ffc6b5",
+                }]
+            },
+            // options: {
+            //     scales: {
+            //         y: {
+            //             beginAtZero: true
+            //         }
+            //     }
+            // }
+        });
+    </script>
+@endpush

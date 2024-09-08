@@ -14,12 +14,13 @@ class RFIDController extends Controller
 {
     public function handleRFID(Request $request)
     {
-        $request->validate([
+        
+
+         $request->validate([
             'rfid' => 'required|string',
             'scanner_id' => 'required|string'
         ]);
 
-        // Rfid data
         $rfid = $request->input('rfid');
         $scannerId = $request->input('scanner_id');
 
@@ -28,11 +29,26 @@ class RFIDController extends Controller
 
         $user = User::where('rfid', $rfid)->first();
 
+        try{
+
+
         if (!$user) {
+
+            $file = storage_path('app/UIDContainer.php');
+           
+            $write = $rfid;
+            file_put_contents($file, $write);
+
+            $rfid = $request->input('rfid');
+            $scannerId = $request->input('scanner_id');
+           
+   
             return response()->json([
-                'success' => false,
-                'message' => 'RFID not associated with any user',
-            ], 404);
+                'success' => true,
+                'message' => 'RFID assigned to the user and stored in the file.',
+                // 'rfid' => $rfid,
+            ]);
+        
         }
 
         $now = Carbon::now('Asia/Colombo');
@@ -75,6 +91,7 @@ class RFIDController extends Controller
                 'success' => true,
                 'message' => 'Access allowed. Ticket status updated to "in".',
             ]);
+            
         } elseif ($relevantBooking->status == 'in') {
             
             $cost = $relevantBooking->cost;
@@ -105,7 +122,18 @@ class RFIDController extends Controller
     
             
         }
-
+        }catch (\Exception $e) {
+            // Log the exception
+            Log::error('RFID Handling Error: ' . $e->getMessage());
+    
+            // Return a 500 response with the error message
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while processing the RFID.',
+            ], 500);
+        }
+            
+        
        
     }
 

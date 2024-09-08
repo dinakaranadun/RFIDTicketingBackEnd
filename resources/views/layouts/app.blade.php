@@ -64,6 +64,36 @@
                             <p>Route</p>
                         </a>
                     </li>
+                    <li class="{{ request()->routeIs('schedule.*') ? 'active' : '' }}">
+                        <a href="{{ route('schedule.index') }}">
+                            <i class="nc-icon nc-bullet-list-67"></i>
+                            <p>Schedule</p>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('passenger.*') ? 'active' : '' }}">
+                        <a href="{{ route('passenger.index') }}">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Passenger</p>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('passenger.*') ? 'active' : '' }}">
+                        <a href="{{ route('passenger.index') }}">
+                            <i class="nc-icon nc-chat-33"></i>
+                            <p>Forum</p>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('passenger.*') ? 'active' : '' }}">
+                        <a href="{{ route('passenger.index') }}">
+                            <i class="nc-icon nc-bell-55"></i>
+                            <p>Send Notification</p>
+                        </a>
+                    </li>
+                    <li class="{{ request()->routeIs('route.*') ? 'active' : '' }}">
+                        <a href="{{ route('route.index') }}">
+                            <i class="nc-icon nc-chart-bar-32"></i>
+                            <p>Reports</p>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </div>

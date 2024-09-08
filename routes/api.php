@@ -30,7 +30,10 @@ Route::prefix('v1')->group(function () {
      // User routes
      Route::prefix('users')->group(function () {
         Route::post('create', [PassengerController::class, 'store']);
-        // Add other user routes here if needed
+        Route::put('update/{id}',[PassengerController::class, 'update']);
+        Route::put('updatePassword/{id}',[PassengerController::class, 'updatePassword']);
+        Route::post('uploadProfileImage/{id}',[PassengerController::class,'uploadProfileImage']);
+
         //train
         Route::get('traindetails', [TrainController::class, 'index']);
         Route::post('searchtrains', [TrainController::class, 'show']);

@@ -15,6 +15,7 @@ class RouteController extends Controller
         $routes = Route::when(request('name'), function ($query, $name) {
             return $query->where('name', 'LIKE', '%' . $name . '%');
         })->paginate(10);
+       
 
         return view('route.index', compact('routes'));
     }
@@ -27,6 +28,7 @@ class RouteController extends Controller
 
     public function store(Request $request)
     {
+       
         $request->validate(
             [
                 'name' => 'required|string',
@@ -58,6 +60,7 @@ class RouteController extends Controller
 
     public function edit(Route $route)
     {
+        
         $stations = Station::all();
         return view('route.edit', compact('route', 'stations'));
     }
