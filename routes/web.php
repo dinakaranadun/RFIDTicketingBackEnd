@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SMSController;
 use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\ForumController;
 use App\Http\Controllers\Admin\RouteController;
 use App\Http\Controllers\Admin\TrainController;
 use App\Http\Controllers\Admin\StationController;
@@ -35,6 +36,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('route', RouteController::class);
     Route::resource('schedule', ScheduleController::class);
     Route::resource('passenger', PassengerController::class);
-    
+    Route::resource('forum', ForumController::class);
     Route::post('send-sms', [SMSController::class, 'sendSms']);
 });

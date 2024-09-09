@@ -76,8 +76,8 @@
                             <p>Passenger</p>
                         </a>
                     </li>
-                    <li class="{{ request()->routeIs('passenger.*') ? 'active' : '' }}">
-                        <a href="{{ route('passenger.index') }}">
+                    <li class="{{ request()->routeIs('forum.*') ? 'active' : '' }}">
+                        <a href="{{ route('forum.index') }}">
                             <i class="nc-icon nc-chat-33"></i>
                             <p>Forum</p>
                         </a>
