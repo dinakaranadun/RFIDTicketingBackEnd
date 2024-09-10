@@ -82,8 +82,8 @@
                             <p>Forum</p>
                         </a>
                     </li>
-                    <li class="{{ request()->routeIs('passenger.*') ? 'active' : '' }}">
-                        <a href="{{ route('passenger.index') }}">
+                    <li class="{{ request()->routeIs('notification.*') ? 'active' : '' }}">
+                        <a href="{{ route('notification.index') }}">
                             <i class="nc-icon nc-bell-55"></i>
                             <p>Send Notification</p>
                         </a>

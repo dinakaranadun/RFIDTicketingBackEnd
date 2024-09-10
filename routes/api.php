@@ -12,6 +12,7 @@ use App\Http\Controllers\StationController;
 use App\Http\Controllers\PassengerController;
 use App\Http\Controllers\SchedualeController;
 use App\Http\Controllers\TransactionController;
+use App\Http\Controllers\NotificationController;
 
 
 /*
@@ -63,6 +64,9 @@ Route::prefix('v1')->group(function () {
 
         //transaction
         Route::post('getTransactionData', [TransactionController::class, 'getTransactionData']);
+
+        //notifiction
+        Route::get('sendNotification',[NotificationController::class,'index']);
 
         
 

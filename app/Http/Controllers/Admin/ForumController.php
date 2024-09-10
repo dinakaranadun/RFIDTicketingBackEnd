@@ -16,8 +16,6 @@ class ForumController extends Controller
         $categories = Forum::select('category')->distinct()->pluck('category');
 
 
-
-
         $unansweredQuestions = Forum::doesntHave('answers')
         ->when($request->name, function ($query, $name) {
             return $query->where('title', 'LIKE', '%' . $name . '%');

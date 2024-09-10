@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\ScheduleController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PassengerController;
 use App\Http\Controllers\Admin\TrainClassController;
+use App\Http\Controllers\Admin\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,5 +38,6 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('schedule', ScheduleController::class);
     Route::resource('passenger', PassengerController::class);
     Route::resource('forum', ForumController::class);
+    Route::resource('notification', NotificationController::class);
     Route::post('send-sms', [SMSController::class, 'sendSms']);
 });
