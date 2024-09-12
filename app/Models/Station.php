@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Route;
 use App\Models\Ticket;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Console\Scheduling\Schedule;
@@ -30,5 +31,10 @@ class Station extends Model
     public function ticket()
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    public function route()
+    {
+        return $this->belongsTo(Route::class);
     }
 }

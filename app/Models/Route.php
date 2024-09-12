@@ -13,6 +13,6 @@ class Route extends Model
 
     public function stations()
     {
-        return $this->hasManyThrough(Station::class, StationRoute::class, 'route_id', 'id', 'id', 'station_id');
+        return $this->hasManyThrough(Station::class, StationRoute::class, 'route_id', 'id', 'id', 'station_id')->orderBy('order');;
     }
 }

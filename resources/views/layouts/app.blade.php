@@ -88,8 +88,8 @@
                             <p>Send Notification</p>
                         </a>
                     </li>
-                    <li class="{{ request()->routeIs('route.*') ? 'active' : '' }}">
-                        <a href="{{ route('route.index') }}">
+                    <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
+                        <a href="{{ route('report.index') }}">
                             <i class="nc-icon nc-chart-bar-32"></i>
                             <p>Reports</p>
                         </a>

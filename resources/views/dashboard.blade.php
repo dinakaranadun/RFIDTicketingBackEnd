@@ -118,9 +118,9 @@
             <div class="col">
                 <div class="card card-stats p-3">
                     <div class="numbers">
-                        <p class="card-category">Earnings per Day</p>
+                        <p class="card-category">Usage per Day</p>
                     </div>
-                    <canvas id="earnPerDay"></canvas>
+                    <canvas id="usagePerDay"></canvas>
                 </div>
             </div>
         </div>
@@ -129,16 +129,16 @@
 @push('scripts')
     <script src="{{ asset('assets/js/plugins/chartjs.min.js') }}"></script>
     <script>
-        new Chart(document.getElementById('earnPerDay').getContext("2d"), {
+        new Chart(document.getElementById('usagePerDay').getContext("2d"), {
             type: 'line',
             data: {
-                labels: @json(array_keys($earn_per_day)),
+                labels: @json(array_keys($usage_per_day)),
                 datasets: [{
-                    label: 'Earning',
-                    data: @json(array_values($earn_per_day)),
+                    label: 'Usage',
+                    data: @json(array_values($usage_per_day)),
                     // borderWidth: 1
-                    borderColor: "#f17e5d",
-                    backgroundColor: "#ffc6b5",
+                    borderColor: "#4fddff",
+                    backgroundColor: "#4fddff",
                 }]
             },
             // options: {
