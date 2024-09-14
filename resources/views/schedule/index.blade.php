@@ -46,29 +46,29 @@
                             <table class="table">
                                 <thead class=" text-primary">
                                     <th>Name</th>
-                                    <th>Action</th>
+                                    <th>Route Name</th>
+                                    <th>Action</th>  
                                 </thead>
                                 <tbody>
                                     @foreach ($trains as $train)
                                         <tr>
+                                            <td>{{ $train->name }}</td>
                                             <td>
-                                                {{ $train->name }}
+                                                @foreach ($train->routes as $route)
+                                                    {{ $route->name }} 
+                                                @endforeach
                                             </td>
-                                            
                                             <td>
-                                                <a href="{{ route('schedule.edit', $train->id) }}"
-                                                    class="btn btn-warning btn-round">Edit</a>
-                                                <form action="{{ route('schedule.destroy', $train->id) }}" method="POST"
-                                                    style="display: inline-block">
+                                                <a href="{{ route('schedule.edit', $train->id) }}" class="btn btn-warning btn-round">Edit</a>
+                                                <form action="{{ route('schedule.destroy', $train->id) }}" method="POST" style="display: inline-block">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-round"
-                                                        onclick="return confirm('Are you sure you want to delete this route?')">CLear Schedule</button>
+                                                    <button type="submit" class="btn btn-danger btn-round" onclick="return confirm('Are you sure you want to delete this route?')">Clear Schedule</button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @endforeach
-                                </tbody>
+                                </tbody>                                
                             </table>
                         </div>
                         <div class="mt-3">

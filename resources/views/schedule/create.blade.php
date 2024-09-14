@@ -11,11 +11,24 @@
                             <div class="row">
                                 <div class="col-md-4">
                                     <select name="train" class="form-control">
-                                        <option value="">Select Train</option>
+                                        <option value="" >Select Train</option>
                                         @foreach ($trains as $train)
                                             <option value="{{ $train->id }}"
                                                 {{ old('train') == $train->id ? 'selected' : '' }}>
                                                 {{ $train->name }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('name')
+                                    <strong class="invalid-feedback d-block">{{ $message }}</strong>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <select name="route" class="form-control">
+                                        <option value="">Select Route</option>
+                                        @foreach ($routes as $route)
+                                            <option value="{{ $route->id }}"
+                                                {{ old('route') == $route->id ? 'selected' : '' }}>
+                                                {{ $route->name }}</option>
                                         @endforeach
                                     </select>
                                     @error('name')

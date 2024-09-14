@@ -25,6 +25,22 @@
                                     </span>
                                     @enderror
                                 </div>
+                                <div class="col-md-4">
+                                    <select id="route" name="route" class="form-control">
+                                        <option value="">Select Route</option>
+                                        @foreach ($routes as $routeOption)
+                                            <option value="{{ $routeOption->id }}"
+                                                {{ $train->routes->contains($routeOption->id) ? 'selected' : '' }}>
+                                                {{ $routeOption->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    @error('route')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                    @enderror
+                                </div>
                                 <div class="col-12">
                                     <hr>
                                     <div id="stations" class="row">

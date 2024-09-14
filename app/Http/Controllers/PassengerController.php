@@ -49,14 +49,14 @@ class PassengerController extends Controller
         $user->password = Hash::make($request->input('password'));
         $user->NIC = $request->input('NIC');
         $user->contact_number = $request->input('contact_number');
-        $user->image = null;
+        $user->image_URL = null;
         $user->rfid = null;
         $user->account_credits = 0.00;
         $user->status = 'inactive';
         $user->remember_token = null;
         $user->created_at = Carbon::now();
         $user->updated_at = Carbon::now();
-        $user->contactnumber_verified_at = Carbon::now();
+        $user->contactnumber_verified_at = null;
 
 
         $user->save();

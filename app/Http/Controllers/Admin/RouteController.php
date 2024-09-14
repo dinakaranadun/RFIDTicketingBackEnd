@@ -85,6 +85,7 @@ class RouteController extends Controller
         $route->save();
 
         StationRoute::where('route_id', $route->id)->delete();
+        
         foreach ($request->stations as $key => $station) {
             $route_station = new StationRoute();
             $route_station->route_id = $route->id;

@@ -46,6 +46,8 @@ Route::prefix('v1')->group(function () {
         Route::post('upcomingTrips',[TicketController::class,'show']);
         Route::post('getRecentTrips',[TicketController::class,'recentTicket']);
         Route::delete('deleteBooking/{bookingId}', [TicketController::class, 'destroy']);
+        Route::put('requestRefund/{bookingId}', [TicketController::class, 'refund']);
+
         //scheduale
         Route::post('searchscheduale', [SchedualeController::class, 'search']);
 

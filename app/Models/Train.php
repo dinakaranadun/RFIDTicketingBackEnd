@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Route;
 use App\Models\Train;
 use App\Models\Station;
 use App\Models\TrainClass;
@@ -46,6 +47,12 @@ class Train extends Model
     {
         return $this->belongsTo(Station::class, 'end_station', 'id');
     }
+
+    public function routes()
+    {
+        return $this->belongsToMany(Route::class, 'train_route', 'train_id', 'route_id');
+    }
+
 
     // public function trainClassess()
     // {

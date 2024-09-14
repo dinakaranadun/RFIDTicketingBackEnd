@@ -75,6 +75,33 @@
                                         </span>
                                     @enderror
                                 </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Working Days</label>
+                                    <div class="form-group">
+                                        <select name="working_days" class="form-control">
+                                            <option value="" disabled selected>Select Working Days</option>
+                                            <option value="all" >All Days</option>
+                                            <option value="weekend" >WeekEnd</option>
+                                        </select>
+                                    </div>
+                                    @error('working_days')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Special Notes</label>
+                                    <div class="form-group">
+                                        <input type="text" name="special_note" class="form-control"
+                                            value="{{ old('special_notes', '') }}">
+                                    </div>
+                                    @error('special_note')
+                                        <span class="invalid-feedback d-block" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-12">

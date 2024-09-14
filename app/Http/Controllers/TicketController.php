@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\User;
 use App\Models\Train;
 use App\Models\Ticket;
 use App\Models\Station;
 use App\Models\Scheduale;
 use Illuminate\Http\Request;
+use App\Mail\BookingConfirmed;
 use App\Services\D7SMSService;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SMSController;
 
 
@@ -145,11 +148,25 @@ class TicketController extends Controller
         $smsController = new SMSController();
         $smsController->sendSms( $contactNumber,$message);
 
+        $passenger=User::findorfail($data['passenger_id']);
+        $email=$passenger->email;
+        
+        
+
+        $emailData = [
+            'train_name' => $data['train_name'],
+            'departure' => $data['departure'],
+            'destination' => $data['destination'],
+            'date' => $data['date'],
+            'time' => $data['time'],
+            'class' => $data['class'],
+            'cost' => $data['cost'],
+        ];
+
+
+        Mail::to($email)->send(new BookingConfirmed($emailData));
+
         return response()->json(['message' => 'Booking successfull', 'ticket' => $ticket], 201);
-
-
-
-
     }
 
     /**
@@ -224,7 +241,6 @@ class TicketController extends Controller
         $passengerId = $data['passenger_id'];
 
         $recentTickets = Ticket::where('passenger_id', $passengerId)
-            ->where('status', 'out')
             ->orderBy('created_at', 'desc')
             ->with([
                 'train' => function ($query) {
@@ -240,5 +256,19 @@ class TicketController extends Controller
             ->get();
 
         return response()->json($recentTickets);
+    }
+
+    public function refund($bookingId)
+    {
+        $ticket = Ticket::find($bookingId);
+
+        if (!$ticket) {
+            return response()->json(['error' => 'Ticket not found'], 404);
+        }
+
+        $ticket->status = 'refund requested';
+        $ticket->save();
+
+        return response()->json(['message' => 'Ticket refund requested'], 200);
     }
 }

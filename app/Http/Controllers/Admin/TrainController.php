@@ -32,14 +32,18 @@ class TrainController extends Controller
                 'start_station' => 'required|exists:station,id',
                 'end_station' => 'required|exists:station,id',
                 'train_type' => 'required|string',
+                'working_days'=> 'required|string',
+                'special_note'=> 'nullable|string',
                 'available_classes' => 'required',
                 'available_classes.*' => 'required',
+                
             ],
             [
                 'available_classes.required' => 'At least one class is required',
             ],
             [
                 'name' => 'Train Name',
+
             ]
         );
 
@@ -48,6 +52,8 @@ class TrainController extends Controller
         $train->start_station = $request->start_station;
         $train->end_station = $request->end_station;
         $train->train_type = $request->train_type;
+        $train->working_days = $request->working_days;
+        $train->special_note = $request->special_note;
         $train->save();
 
         foreach ($request->available_classes as $class) {
@@ -63,7 +69,8 @@ class TrainController extends Controller
     public function edit(Train $train)
     {
         $stations = Station::all();
-        return view('train.edit', compact('train', 'stations'));
+        $trains = Train::all();
+        return view('train.edit', compact('train', 'stations','trains'));
     }
 
     public function update(Train $train, Request $request)
@@ -73,11 +80,15 @@ class TrainController extends Controller
                 'name' => 'required|string',
                 'start_station' => 'required|exists:station,id',
                 'end_station' => 'required|exists:station,id',
+                'working_days'=> 'required|string',
+                'special_note'=> 'nullable|string',
                 'train_type' => 'required|string',
                 'available_classes' => 'required',
                 'available_classes.*' => 'required',
             ],
-            [],
+            [
+                'available_classes.required' => 'At least one class is required',
+            ],
             [
                 'name' => 'Train Name',
             ]
@@ -87,6 +98,8 @@ class TrainController extends Controller
         $train->start_station = $request->start_station;
         $train->end_station = $request->end_station;
         $train->train_type = $request->train_type;
+        $train->working_days = $request->working_days;
+        $train->special_note = $request->special_note;
         $train->save();
 
         TrainClass::where('train_id', $train->id)->delete();
