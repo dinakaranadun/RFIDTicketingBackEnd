@@ -13,7 +13,7 @@ class RefundController extends Controller
 {
     public function index(Request $request)
     {
-        $tickets = Ticket::where('status', 'refund requested')
+        $tickets = Ticket::whereIn('status', ['refund requested', 'refunded'])
         ->with('passenger', 'startStation', 'endStation')
         ->when($request->name, function ($query, $name) {
             return $query->whereHas('passenger', function ($query) use ($name) {
@@ -24,6 +24,7 @@ class RefundController extends Controller
             });
         })
         ->paginate(10);
+
 
     return view('refund.index', compact('tickets'));
     }

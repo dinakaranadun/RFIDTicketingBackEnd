@@ -90,7 +90,7 @@
                     </li>
                     <li class="{{ request()->routeIs('refund.*') ? 'active' : '' }}">
                         <a href="{{ route('refund.index') }}">
-                            <i class="nc-icon nc-bell-55"></i>
+                            <i class="nc-icon nc-money-coins"></i>
                             <p>Refund Requests</p>
                         </a>
                     </li>
