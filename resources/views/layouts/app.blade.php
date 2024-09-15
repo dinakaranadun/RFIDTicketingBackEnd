@@ -88,12 +88,19 @@
                             <p>Send Notification</p>
                         </a>
                     </li>
+                    <li class="{{ request()->routeIs('refund.*') ? 'active' : '' }}">
+                        <a href="{{ route('refund.index') }}">
+                            <i class="nc-icon nc-bell-55"></i>
+                            <p>Refund Requests</p>
+                        </a>
+                    </li>
                     <li class="{{ request()->routeIs('report.*') ? 'active' : '' }}">
                         <a href="{{ route('report.index') }}">
                             <i class="nc-icon nc-chart-bar-32"></i>
                             <p>Reports</p>
                         </a>
                     </li>
+                    
                 </ul>
             </div>
         </div>

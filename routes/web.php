@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\ForumController;
 use App\Http\Controllers\Admin\RouteController;
 use App\Http\Controllers\Admin\TrainController;
+use App\Http\Controllers\Admin\RefundController;
 use App\Http\Controllers\Admin\ReportController;
 use App\Http\Controllers\Admin\StationController;
 use App\Http\Controllers\Admin\EmployeeController;
@@ -42,11 +43,14 @@ Route::group(['middleware' => 'auth:web'], function () {
     Route::resource('passenger', PassengerController::class);
     Route::resource('forum', ForumController::class);
     Route::resource('notification', NotificationController::class);
+    Route::resource('refund', RefundController::class);
+    Route::put('/refund/{ticket}/{passenger}', [RefundController::class, 'update'])->name('refund.update');
     Route::resource('report',ReportController::class);
     Route::resource('passengerflow',PassengerFlowController::class);
     Route::get('/reports/passenger-flow/generate', [PassengerFlowController::class, 'generateReport'])->name('report.passengerFlowGenerate');
     Route::resource('revenue', RevenueReportController::class);
     Route::get('/reports/revenue/generate', [RevenueReportController::class, 'generateRevenueReport'])->name('report.revenueGenerate');
+
 
     Route::post('send-sms', [SMSController::class, 'sendSms']);
 });
