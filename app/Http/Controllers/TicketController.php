@@ -8,9 +8,11 @@ use App\Models\Train;
 use App\Models\Ticket;
 use App\Models\Station;
 use App\Models\Scheduale;
+use App\Models\StationRoute;
 use Illuminate\Http\Request;
 use App\Mail\BookingConfirmed;
 use App\Services\D7SMSService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\SMSController;
 
@@ -20,7 +22,7 @@ class TicketController extends Controller
    
     public function index(Request $request)
    {
-    $cost_for_1km = 2;
+    $cost_for_1km = 2.5;
     $minimum_distance_cost = 20;
 
     $data = $request->validate([
@@ -31,40 +33,14 @@ class TicketController extends Controller
         'date' => 'required|date',
     ]);
 
-    $departure_station_distance = Station::select('distance_from_central_station')
-        ->where('id', $data['departure_id'])
-        ->value('distance_from_central_station');
-
-    $destination_station_distance = Station::select('distance_from_central_station')
-        ->where('id', $data['destination_id'])
-        ->value('distance_from_central_station');
-
-    $distance = abs($departure_station_distance - $destination_station_distance);
-
-    if ($distance < 50) {
-        if ($data['class'] == 'First Class') {
-            return response()->json(
-                [
-                    'error' => 'First Class is not available for distances less than 50km.'
-                ]
-            );
-        }
+    $sameRoute = $this->checkSameRoute($data['departure_id'], $data['destination_id']);
+    if ($sameRoute) {
+        $cost = $this->calculateSameRouteCost($data,$minimum_distance_cost,$cost_for_1km );
     }
+    else {
+        $cost = $this->calculateDifferentRouteCost($data,$minimum_distance_cost,$cost_for_1km);
 
-    if ($distance < 3) {
-        $cost = $minimum_distance_cost;
-    } else {
-        if ($data['class'] == 'First Class') {
-            $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km * 3;
-        } elseif ($data['class'] == 'Second Class') {
-            $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km * 2;
-        } else {
-            $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km;
-        }
     }
-
-    // Round the cost to the nearest 10th
-    $cost = round($cost);
 
     $response = [
         'data' => $data,
@@ -270,5 +246,91 @@ class TicketController extends Controller
         $ticket->save();
 
         return response()->json(['message' => 'Ticket refund requested'], 200);
+    }
+
+
+
+    private function calculateSameRouteCost($data,$minimum_distance_cost,$cost_for_1km)
+    {
+        $departure_station_distance = Station::select('distance_from_central_station')
+            ->where('id', $data['departure_id'])
+            ->value('distance_from_central_station');
+
+        $destination_station_distance = Station::select('distance_from_central_station')
+            ->where('id', $data['destination_id'])
+            ->value('distance_from_central_station');
+
+        $distance = abs($departure_station_distance - $destination_station_distance);
+
+        if ($distance < 50 && $data['class'] == 'First Class') {
+            return response()->json(
+                [
+                    'error' => 'First Class is not available for distances less than 50km.'
+                ]
+            );
+        }
+
+        // $minimum_distance_cost = 20; 
+        // $cost_for_1km = 2.5; 
+
+        if ($distance < 3) {
+            $cost = $minimum_distance_cost;
+        } else {
+            if ($data['class'] == 'First Class') {
+                $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km * 3;
+            } elseif ($data['class'] == 'Second Class') {
+                $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km * 2;
+            } else {
+                $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km;
+            }
+        }
+
+        return round($cost);
+    }
+
+    private function calculateDifferentRouteCost($data,$minimum_distance_cost,$cost_for_1km)
+    {
+        $departure_station_distance = Station::select('distance_from_central_station')
+            ->where('id', $data['departure_id'])
+            ->value('distance_from_central_station');
+
+        $destination_station_distance = Station::select('distance_from_central_station')
+            ->where('id', $data['destination_id'])
+            ->value('distance_from_central_station');
+
+        $distance = $departure_station_distance + $destination_station_distance;
+
+        if ($distance < 50 && $data['class'] == 'First Class') {
+            return response()->json(
+                [
+                    'error' => 'First Class is not available for distances less than 50km.'
+                ]
+            );
+        }
+
+
+        if ($distance < 3) {
+            $cost = $minimum_distance_cost;
+        } else {
+            if ($data['class'] == 'First Class') {
+                $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km * 3;
+            } elseif ($data['class'] == 'Second Class') {
+                $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km * 2;
+            } else {
+                $cost = $minimum_distance_cost + ($distance - 3) * $cost_for_1km;
+            }
+        }
+
+        return round($cost);
+    }
+
+
+    private function checkSameRoute($departureId, $destinationId)
+    {
+        $departureRoutes = StationRoute::where('station_id', $departureId)->pluck('route_id');
+    
+        return StationRoute::where('station_id', $destinationId)
+            ->whereIn('route_id', $departureRoutes)
+            ->exists();
     }
 }

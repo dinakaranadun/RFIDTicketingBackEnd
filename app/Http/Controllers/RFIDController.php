@@ -9,6 +9,7 @@ use App\Models\Ticket;
 use Illuminate\Http\Request;
 use App\Models\ScannerTicket;
 use Illuminate\Support\Facades\Log; 
+use App\Http\Controllers\SMSController;
 
 class RFIDController extends Controller
 {
@@ -32,6 +33,8 @@ class RFIDController extends Controller
         try{
 
 
+
+
         if (!$user) {
 
             $file = storage_path('app/UIDContainer.php');
@@ -51,14 +54,21 @@ class RFIDController extends Controller
         
         }
 
+        if ($user->status != 'active') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Account suspended. Please contact the nearest railway office.',
+            ]);
+        }
+
         $now = Carbon::now('Asia/Colombo');
-        // $twoHoursBefore = $now->copy()->subHours(2);
+        $twoHoursBefore = $now->copy()->subHours(2);
 
         $bookings = Ticket::where('passenger_id', $user->id)
-                        ->whereDate('date', $now->toDateString())
-                        ->whereIn('status', ['pending', 'in'])
-                        ->get();
-                         // ->whereTime('date', '>=', $twoHoursBefore->toTimeString())
+                    ->whereDate('date', $now->toDateString())
+                    ->whereIn('status', ['pending', 'in'])
+                    // ->whereTime('time', '>=', $twoHoursBefore)
+                    ->get();
 
 
         if ($bookings->isEmpty()) {
@@ -103,6 +113,14 @@ class RFIDController extends Controller
                 $relevantBooking->status = 'out';
                 $relevantBooking->save();
 
+                $contactNumber = $user->contact_number;
+
+                $message = "Thanks for using Sri lankan railway ticket cost deducted from your account!\n";
+        
+        
+                $smsController = new SMSController();
+                $smsController->sendSms( $contactNumber,$message);
+
                 
         
                 return response()->json([
@@ -123,7 +141,6 @@ class RFIDController extends Controller
             
         }
         }catch (\Exception $e) {
-            // Log the exception
             Log::error('RFID Handling Error: ' . $e->getMessage());
     
             // Return a 500 response with the error message
