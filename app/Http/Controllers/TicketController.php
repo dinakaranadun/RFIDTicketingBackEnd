@@ -327,10 +327,13 @@ class TicketController extends Controller
 
     private function checkSameRoute($departureId, $destinationId)
     {
-        $departureRoutes = StationRoute::where('station_id', $departureId)->pluck('route_id');
-    
+        // Find the route_id where the departure station exists
+        $routeId = StationRoute::where('station_id', $departureId)->value('route_id');
+        
+        // Check if the destination station is on the same route
         return StationRoute::where('station_id', $destinationId)
-            ->whereIn('route_id', $departureRoutes)
+            ->where('route_id', $routeId)
             ->exists();
     }
+
 }

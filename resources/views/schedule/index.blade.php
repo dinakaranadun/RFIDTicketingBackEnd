@@ -51,24 +51,26 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($trains as $train)
-                                        <tr>
-                                            <td>{{ $train->name }}</td>
-                                            <td>
-                                                @foreach ($train->routes as $route)
-                                                    {{ $route->name }} 
-                                                @endforeach
-                                            </td>
-                                            <td>
-                                                <a href="{{ route('schedule.edit', $train->id) }}" class="btn btn-warning btn-round">Edit</a>
-                                                <form action="{{ route('schedule.destroy', $train->id) }}" method="POST" style="display: inline-block">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-round" onclick="return confirm('Are you sure you want to delete this route?')">Clear Schedule</button>
-                                                </form>
-                                            </td>
-                                        </tr>
+                                        @if ($train->routes->isNotEmpty())
+                                            <tr>
+                                                <td>{{ $train->name }}</td>
+                                                <td>
+                                                    @foreach ($train->routes as $route)
+                                                        {{ $route->name }} 
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    <a href="{{ route('schedule.edit', $train->id) }}" class="btn btn-warning btn-round">Edit</a>
+                                                    <form action="{{ route('schedule.destroy', $train->id) }}" method="POST" style="display: inline-block">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger btn-round" onclick="return confirm('Are you sure you want to delete this route?')">Clear Schedule</button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     @endforeach
-                                </tbody>                                
+                                </tbody>                                                             
                             </table>
                         </div>
                         <div class="mt-3">

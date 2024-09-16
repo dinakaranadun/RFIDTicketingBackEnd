@@ -77,15 +77,14 @@ class ScheduleController extends Controller
     {
         $schedules = Scheduale::with(['train', 'station'])
             ->where('train_id', $id)
-            ->orderBy('station_id')
+            ->orderBy('order')
             ->get();
 
         $trains = Train::all();
         $stations = Station::all();
 
-        // Get the routes assigned to this train
         $train = Train::with('routes')->find($id);
-        $routes = Route::all(); // Get all routes for dropdown
+        $routes = Route::all(); 
 
         return view('schedule.edit', compact('schedules', 'trains', 'stations', 'routes', 'train', 'id'));
     }
@@ -111,8 +110,16 @@ class ScheduleController extends Controller
             ]
         );
 
+        $oldRouteId = $request->input('old_route_id');
+
         $train = Train::find($id);
-        $train->routes()->sync([$request->route]);
+
+        $train_route = TrainRoute::where('train_id', $id)
+                        ->where('route_id', $oldRouteId)
+                        ->firstOrFail();        
+        $train_route->route_id = $request->route;
+        $train_route->save();
+
         Scheduale::where('train_id', $id)->delete();
 
         foreach ($request->stations as $key => $station) {

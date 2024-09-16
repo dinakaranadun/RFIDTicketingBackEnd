@@ -9,7 +9,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-md-4">
-                                    <label class="form-label">Name</label>
+                                    <label class="form-label">Name/NIC</label>
                                     <div class="form-group">
                                         <input type="text" name="name" class="form-control"
                                             value="{{ request()->get('name', '') }}">
