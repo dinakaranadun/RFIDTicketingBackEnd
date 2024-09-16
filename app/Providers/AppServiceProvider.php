@@ -26,6 +26,10 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('valid_time', function($attribute, $value, $parameters, $validator) {
             return preg_match('/^\d{2}:\d{2}(:\d{2})?$/', $value);
         }, 'The :attribute must be a valid time format (H:i or H:i:s).');
+
+        if($this->app->environment('production')) {
+            \URL::forceScheme('https');
+        }
     }
 
 
