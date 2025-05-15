@@ -14,7 +14,7 @@ class SMSController extends Controller
         $url = 'https://dkppl1.api.infobip.com/sms/2/text/advanced';
 
         $headers = [
-            'Authorization' => 'App 85febc947deecbe31ac6637535c26054-1c4674fd-5edb-4d57-ba25-e338bc637f84',
+            'Authorization' => '',
             'Content-Type' => 'application/json',
             'Accept' => 'application/json',
         ];
